@@ -7,3 +7,6 @@ services:
       - 'MONGO_INITDB_ROOT_USERNAME=root'
     ports:
       - '27017'
+    volumes:
+      - ./provisioning/mongo-data:/data/db
+      - ./provisioning:/docker-entrypoint-initdb.d:ro
