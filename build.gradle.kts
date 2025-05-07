@@ -41,6 +41,11 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-aop")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("com.github.ben-manes.caffeine:caffeine")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
@@ -62,5 +67,37 @@ kotlin {
 }
 
 tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
+//dependencies {
+//    testImplementation(kotlin("test"))
+//    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
+//    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
+//}
+
+sourceSets {
+    val integration by creating {
+        kotlin.srcDir("src/integration/kotlin")
+        resources.srcDir("src/integration/resources")
+        compileClasspath += sourceSets["main"].output + sourceSets["test"].output
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
+configurations {
+    val integrationImplementation by getting {
+        extendsFrom(configurations.testImplementation.get())
+    }
+    val integrationRuntimeOnly by getting {
+        extendsFrom(configurations.testRuntimeOnly.get())
+    }
+}
+
+tasks.register<Test>("integrationTest") {
+    description = "Runs integration tests."
+    group = "verification"
+    testClassesDirs = sourceSets["integration"].output.classesDirs
+    classpath = sourceSets["integration"].runtimeClasspath
     useJUnitPlatform()
 }

@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: diabetix
+  data:
+    mongodb:
+      uri: mongodb://admin:admin@localhost:27017/diabetix?authSource=admin
+  security:
+    oauth2:
+      client:
+        provider:
+          oidc:
+            issuer-uri: http://localhost:9080/realms/diabetix
+        registration:
+          oidc:
+            client-id: diabetix-app
+            client-secret: 6ZmD7rnYLjLa8ciuYXDahtD0423sOzsE
+            scope: openid, profile, email, offline_access # last one for refresh tokens
+
+diabetix:
+  security:
+    content-security-policy: "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:"
+    permissions-policy-header: "camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()"
+    oauth2:
+      audience:
+        - account
+        - api://default
