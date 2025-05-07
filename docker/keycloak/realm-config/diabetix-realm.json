@@ -27,13 +27,13 @@
   "oauth2DevicePollingInterval": 5,
   "enabled": true,
   "sslRequired": "external",
-  "registrationAllowed": false,
+  "registrationAllowed": true,
   "registrationEmailAsUsername": false,
   "rememberMe": false,
   "verifyEmail": false,
   "loginWithEmailAllowed": true,
   "duplicateEmailsAllowed": false,
-  "resetPasswordAllowed": false,
+  "resetPasswordAllowed": true,
   "editUsernameAllowed": false,
   "bruteForceProtected": false,
   "permanentLockout": false,
@@ -57,6 +57,15 @@
         "attributes": {}
       },
       {
+        "id": "f9eef298-fcdf-47a6-b4c4-4d09a81281cc",
+        "name": "ROLE_USER",
+        "description": "",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "f82f0695-5142-4d28-8456-0918adea9b4f",
+        "attributes": {}
+      },
+      {
         "id": "63b34b12-b9bc-4594-bba3-af47a25a6922",
         "name": "default-roles-diabetix",
         "description": "${role_default-roles}",
@@ -67,6 +76,9 @@
             "uma_authorization"
           ],
           "client": {
+            "diabetix-app": [
+              "ROLE_USER"
+            ],
             "account": [
               "view-profile",
               "manage-account"
@@ -81,6 +93,15 @@
         "id": "1f8a34bc-53b7-4736-a78b-0fea0fd0e3e1",
         "name": "uma_authorization",
         "description": "${role_uma_authorization}",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "f82f0695-5142-4d28-8456-0918adea9b4f",
+        "attributes": {}
+      },
+      {
+        "id": "a39df535-5feb-401e-a3ea-955e186de7d6",
+        "name": "ROLE_ADMIN",
+        "description": "",
         "composite": false,
         "clientRole": false,
         "containerId": "f82f0695-5142-4d28-8456-0918adea9b4f",
@@ -303,8 +324,26 @@
       "security-admin-console": [],
       "diabetix-app": [
         {
+          "id": "c7ed1bb9-9299-42ea-9ec0-c25cc920a791",
+          "name": "ROLE_ADMIN",
+          "description": "",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "90171540-b156-4e56-9e76-b05b4fee0332",
+          "attributes": {}
+        },
+        {
           "id": "189b7c6d-6b8f-47b1-8d9a-313e97116367",
           "name": "uma_protection",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "90171540-b156-4e56-9e76-b05b4fee0332",
+          "attributes": {}
+        },
+        {
+          "id": "484eec2d-0e0e-41c5-bbe6-48fa17481048",
+          "name": "ROLE_USER",
+          "description": "",
           "composite": false,
           "clientRole": true,
           "containerId": "90171540-b156-4e56-9e76-b05b4fee0332",
@@ -414,7 +453,30 @@
       ]
     }
   },
-  "groups": [],
+  "groups": [
+    {
+      "id": "8c2b7124-b35f-4c00-a58b-51af3d348109",
+      "name": "Admins",
+      "path": "/Admins",
+      "subGroups": [],
+      "attributes": {},
+      "realmRoles": [
+        "ROLE_ADMIN"
+      ],
+      "clientRoles": {}
+    },
+    {
+      "id": "e0d5014f-9020-476e-9182-3a282e75770c",
+      "name": "Users",
+      "path": "/Users",
+      "subGroups": [],
+      "attributes": {},
+      "realmRoles": [
+        "ROLE_USER"
+      ],
+      "clientRoles": {}
+    }
+  ],
   "defaultRole": {
     "id": "63b34b12-b9bc-4594-bba3-af47a25a6922",
     "name": "default-roles-diabetix",
@@ -423,6 +485,9 @@
     "clientRole": false,
     "containerId": "f82f0695-5142-4d28-8456-0918adea9b4f"
   },
+  "defaultGroups": [
+    "/Users"
+  ],
   "requiredCredentials": [
     "password"
   ],
@@ -467,29 +532,6 @@
   "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
   "webAuthnPolicyPasswordlessAcceptableAaguids": [],
   "webAuthnPolicyPasswordlessExtraOrigins": [],
-  "users": [
-    {
-      "id": "3ddecb35-3377-441c-846c-0a2134883668",
-      "username": "service-account-diabetix-app",
-      "emailVerified": false,
-      "createdTimestamp": 1745420871275,
-      "enabled": true,
-      "totp": false,
-      "serviceAccountClientId": "diabetix-app",
-      "disableableCredentialTypes": [],
-      "requiredActions": [],
-      "realmRoles": [
-        "default-roles-diabetix"
-      ],
-      "clientRoles": {
-        "diabetix-app": [
-          "uma_protection"
-        ]
-      },
-      "notBefore": 0,
-      "groups": []
-    }
-  ],
   "scopeMappings": [
     {
       "clientScope": "offline_access",
@@ -712,7 +754,6 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
       "redirectUris": [
         "http://localhost:8080"
       ],
@@ -723,11 +764,10 @@
       "bearerOnly": false,
       "consentRequired": false,
       "standardFlowEnabled": true,
-      "implicitFlowEnabled": false,
+      "implicitFlowEnabled": true,
       "directAccessGrantsEnabled": true,
-      "serviceAccountsEnabled": true,
-      "authorizationServicesEnabled": true,
-      "publicClient": false,
+      "serviceAccountsEnabled": false,
+      "publicClient": true,
       "frontchannelLogout": true,
       "protocol": "openid-connect",
       "attributes": {
@@ -746,7 +786,6 @@
       "nodeReRegistrationTimeout": -1,
       "defaultClientScopes": [
         "web-origins",
-        "service_account",
         "acr",
         "profile",
         "roles",
@@ -759,47 +798,7 @@
         "organization",
         "offline_access",
         "microprofile-jwt"
-      ],
-      "authorizationSettings": {
-        "allowRemoteResourceManagement": true,
-        "policyEnforcementMode": "ENFORCING",
-        "resources": [
-          {
-            "name": "Default Resource",
-            "type": "urn:diabetix-app:resources:default",
-            "ownerManagedAccess": false,
-            "attributes": {},
-            "uris": [
-              "/*"
-            ]
-          }
-        ],
-        "policies": [
-          {
-            "name": "Default Policy",
-            "description": "A policy that grants access only for users within this realm",
-            "type": "js",
-            "logic": "POSITIVE",
-            "decisionStrategy": "AFFIRMATIVE",
-            "config": {
-              "code": "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
-            }
-          },
-          {
-            "name": "Default Permission",
-            "description": "A permission that applies to the default resource type",
-            "type": "resource",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "defaultResourceType": "urn:diabetix-app:resources:default",
-              "applyPolicies": "[\"Default Policy\"]"
-            }
-          }
-        ],
-        "scopes": [],
-        "decisionStrategy": "UNANIMOUS"
-      }
+      ]
     },
     {
       "id": "44ac29dd-a949-408c-9d0a-3b8e33eabb2f",
@@ -960,8 +959,8 @@
           "protocolMapper": "oidc-allowed-origins-mapper",
           "consentRequired": false,
           "config": {
-            "access.token.claim": "true",
-            "introspection.token.claim": "true"
+            "introspection.token.claim": "true",
+            "access.token.claim": "true"
           }
         }
       ]
@@ -1328,8 +1327,8 @@
           "consentRequired": false,
           "config": {
             "id.token.claim": "true",
-            "access.token.claim": "true",
-            "introspection.token.claim": "true"
+            "introspection.token.claim": "true",
+            "access.token.claim": "true"
           }
         }
       ]
@@ -1418,6 +1417,21 @@
           }
         },
         {
+          "id": "2accb8e3-4e58-4bd7-a6ac-f95c96ef5eb7",
+          "name": "client roles",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-client-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "foo",
+            "introspection.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "resource_access.${client_id}.roles",
+            "jsonType.label": "String",
+            "multivalued": "true"
+          }
+        },
+        {
           "id": "02b8b361-8c1a-4a94-882e-93b2c83b4a51",
           "name": "middle name",
           "protocol": "openid-connect",
@@ -1478,6 +1492,22 @@
             "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "website",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "53068cc6-0914-468b-ace1-8d53ae5ef2be",
+          "name": "groups",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "introspection.token.claim": "true",
+            "multivalued": "true",
+            "user.attribute": "foo",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "groups",
             "jsonType.label": "String"
           }
         },
@@ -1734,6 +1764,18 @@
         "config": {
           "allow-default-scopes": [
             "true"
+          ]
+        }
+      }
+    ],
+    "org.keycloak.userprofile.UserProfileProvider": [
+      {
+        "id": "e68d1fb5-e4ef-49ba-ae50-8431466d31d9",
+        "providerId": "declarative-user-profile",
+        "subComponents": {},
+        "config": {
+          "kc.user.profile.config": [
+            "{\"attributes\":[{\"name\":\"username\",\"displayName\":\"${username}\",\"validations\":{\"length\":{\"min\":3,\"max\":255},\"username-prohibited-characters\":{},\"up-username-not-idn-homograph\":{}},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"email\",\"displayName\":\"${email}\",\"validations\":{\"email\":{},\"length\":{\"max\":255}},\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"firstName\",\"displayName\":\"${firstName}\",\"validations\":{\"length\":{\"max\":255},\"person-name-prohibited-characters\":{}},\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"lastName\",\"displayName\":\"${lastName}\",\"validations\":{\"length\":{\"max\":255},\"person-name-prohibited-characters\":{}},\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"birthdate\",\"displayName\":\"birthdate\",\"validations\":{\"iso-date\":{}},\"annotations\":{},\"required\":{\"roles\":[\"admin\",\"user\"]},\"permissions\":{\"view\":[],\"edit\":[\"admin\"]},\"multivalued\":false}],\"groups\":[{\"name\":\"user-metadata\",\"displayHeader\":\"User metadata\",\"displayDescription\":\"Attributes, which refer to user metadata\"}]}"
           ]
         }
       }
@@ -2529,7 +2571,11 @@
     "cibaAuthRequestedUserHint": "login_hint",
     "oauth2DeviceCodeLifespan": "600",
     "oauth2DevicePollingInterval": "5",
+    "clientOfflineSessionMaxLifespan": "0",
+    "clientSessionIdleTimeout": "0",
     "parRequestUriLifespan": "60",
+    "clientSessionMaxLifespan": "0",
+    "clientOfflineSessionIdleTimeout": "0",
     "cibaInterval": "5",
     "realmReusableOtpCode": "false"
   },
