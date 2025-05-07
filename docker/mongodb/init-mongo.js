@@ -1,26 +1,19 @@
-db = db.getSiblingDB('your_database_name');
+db = db.getSiblingDB('diabetix');
 
 const collection = 'users';
 
-// Sprawdź, czy kolekcja już istnieje
+// Check if collection exists
 if (!db.getCollectionNames().includes(collection)) {
     db.createCollection(collection, {
         validator: {
             $jsonSchema: {
                 bsonType: "object",
-                required: ["email", "login", "name", "surname", "password", "birthdate"],
                 properties: {
-                    id: {
-                        bsonType: "string",
-                        description: "must be a string and is auto-generated"
-                    },
                     email: {
                         bsonType: "string",
-                        description: "must be a string and is required"
                     },
                     login: {
                         bsonType: "string",
-                        description: "must be a string and is required"
                     },
                     name: {
                         bsonType: "string"
@@ -28,16 +21,17 @@ if (!db.getCollectionNames().includes(collection)) {
                     surname: {
                         bsonType: "string"
                     },
-                    password: {
-                        bsonType: "string"
+                    activated: {
+                        bsonType: "bool"
                     },
                     birthdate: {
                         bsonType: "date",
-                        description: "must be a date"
                     },
                     createdAt: {
                         bsonType: "date",
-                        description: "date when the document was created"
+                    },
+                    updatedAt: {
+                        bsonType: "date",
                     }
                 }
             }
@@ -45,12 +39,12 @@ if (!db.getCollectionNames().includes(collection)) {
         validationLevel: "moderate"
     });
 
-    print("✅ Kolekcja 'users' została utworzona z walidacją schematu i polem createdAt.");
+    print("✅ Collection 'users' has been created.");
 
-    db.users.createIndex({ email: 1 }, { unique: true });
     db.users.createIndex({ login: 1 }, { unique: true });
+    db.users.createIndex({ email: 1 }, { unique: true });
 
-    print("✅ Indeksy na 'email' i 'login' zostały utworzone.");
+    print("✅ Indexes has been created.");
 } else {
-    print("ℹ️ Kolekcja 'users' już istnieje.");
+    print("ℹ️ Collection 'users' already exists.");
 }
