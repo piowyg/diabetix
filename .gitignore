@@ -40,4 +40,7 @@ out/
 .kotlin
 
 ### Docker volumes
-/provisioning/mongo-data
+/docker/mongodb/mongo-data/*
+/docker/keycloak/keycloak_pg_data/*
+/docker/.env
+/docker/.env.*
