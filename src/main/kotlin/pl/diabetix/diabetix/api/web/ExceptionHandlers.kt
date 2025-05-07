@@ -6,13 +6,13 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import pl.diabetix.diabetix.domain.CreateUserException
+import pl.diabetix.diabetix.domain.UserNotFoundException
 
 @ControllerAdvice
 class ExceptionHandlers() {
 
-
     @ExceptionHandler
-    fun handleCreateUserExceptionn(ex: CreateUserException): ResponseEntity<ErrorResponse> {
+    fun handleCreateUserException(ex: CreateUserException): ResponseEntity<ErrorResponse> {
         logger.error { "handle CreateUserException ${ex.message}" }
         return handleException(ex.message, HttpStatus.INTERNAL_SERVER_ERROR)
     }
@@ -21,6 +21,12 @@ class ExceptionHandlers() {
     fun handleRuntimeException(ex: RuntimeException): ResponseEntity<ErrorResponse> {
         logger.error { "handle RuntimeException ${ex.message}" }
         return handleException(ex.message, HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+
+    @ExceptionHandler
+    fun handleUserNotFoundException(ex: UserNotFoundException): ResponseEntity<ErrorResponse> {
+        logger.error { "handle UserNotFoundException ${ex.message}" }
+        return handleException(ex.message, HttpStatus.NOT_FOUND)
     }
 
     private fun handleException(message: String?, status: HttpStatus) =
