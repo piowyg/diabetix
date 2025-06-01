@@ -53,28 +53,17 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
     testImplementation("io.projectreactor:reactor-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
-    testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:mongodb")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.mockito:mockito-core:5.2.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:postgresql")
+    testImplementation("com.github.dasniko:testcontainers-keycloak:3.6.0")
+    testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.28.1")
+    testImplementation("org.springframework.security:spring-security-test")
 }
-
-kotlin {
-    compilerOptions {
-        freeCompilerArgs.addAll("-Xjsr305=strict")
-    }
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
-}
-
-//dependencies {
-//    testImplementation(kotlin("test"))
-//    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
-//    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
-//}
 
 sourceSets {
     val integration by creating {
@@ -88,6 +77,7 @@ sourceSets {
 configurations {
     val integrationImplementation by getting {
         extendsFrom(configurations.testImplementation.get())
+        extendsFrom(configurations.testImplementation.get().dependencies.find { it.name == "junit-jupiter" }?.let { configurations.testImplementation.get() } ?: configurations.testImplementation.get())
     }
     val integrationRuntimeOnly by getting {
         extendsFrom(configurations.testRuntimeOnly.get())
@@ -100,4 +90,24 @@ tasks.register<Test>("integrationTest") {
     testClassesDirs = sourceSets["integration"].output.classesDirs
     classpath = sourceSets["integration"].runtimeClasspath
     useJUnitPlatform()
+    include("**/*IT*")
+    testLogging {
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+    }
+}
+
+tasks.register<Test>("unitTest") {
+    description = "Runs unit tests."
+    group = "verification"
+    testClassesDirs = sourceSets["test"].output.classesDirs
+    classpath = sourceSets["test"].runtimeClasspath
+    useJUnitPlatform()
+    include("**/*Test*")
+    testLogging {
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+    }
+}
+
+tasks.withType<ProcessResources> {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
