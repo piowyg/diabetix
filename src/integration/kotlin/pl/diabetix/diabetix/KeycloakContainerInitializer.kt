@@ -16,23 +16,28 @@ class KeycloakContainerInitializer : ApplicationContextInitializer<ConfigurableA
             val keycloakRealmName = "diabetix"
 
             // Start the Keycloak container
-            val keycloakContainer = KeycloakContainer("quay.io/keycloak/keycloak:$keycloakVersion")
+            keycloakContainer = KeycloakContainer("quay.io/keycloak/keycloak:" + keycloakVersion)
                 .withEnv("KEYCLOAK_ADMIN", keycloakAdminUsername)
                 .withEnv("KEYCLOAK_ADMIN_PASSWORD", keycloakAdminPassword)
-                .withRealmImportFile("realm-config/" + keycloakRealmName + "-realm.json")
+                .withRealmImportFile("realm-config/$keycloakRealmName-realm.json")
 
-            keycloakContainer!!.start()
+            keycloakContainer.start()
 
             // Dynamically set the properties in Spring's environment
             val issuerUri = keycloakContainer.authServerUrl + "/realms/" + keycloakRealmName
 
             TestPropertyValues.of(
-                "keycloak.server.url=" + keycloakContainer.authServerUrl,
+                "keycloak.server.url=" + keycloakContainer!!.authServerUrl,
                 "spring.security.oauth2.resourceserver.jwt.issuer-uri=$issuerUri",
                 "spring.security.oauth2.client.provider.oidc.issuer-uri=$issuerUri"
             ).applyTo(applicationContext.environment)
         } catch (e: IOException) {
             throw RuntimeException("Failed to load properties from YAML file", e)
         }
+    }
+
+    companion object {
+        @JvmStatic
+        lateinit var keycloakContainer: KeycloakContainer
     }
 }
