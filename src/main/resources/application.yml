@@ -6,6 +6,9 @@ spring:
       uri: mongodb://admin:admin@localhost:27017/diabetix?authSource=admin
   security:
     oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9080/realms/diabetix
       client:
         provider:
           oidc:

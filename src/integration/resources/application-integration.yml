@@ -1,0 +1,26 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  security:
+    oauth2:
+      client:
+        registration:
+          oidc:
+            client-id: diabetix-integration
+            client-secret: "**********"
+            scope: openid, profile, email, offline_access
+
+local:
+  server:
+    port: 8080
+
+application:
+  keycloak:
+    admin:
+      username: admin
+      password: admin@123
+    realm:
+      name: diabetix
+      client:
+        id: diabetix-integration
+        secret: "**********"

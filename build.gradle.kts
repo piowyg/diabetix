@@ -57,10 +57,10 @@ dependencies {
     testImplementation("org.testcontainers:mongodb")
     testImplementation("org.mockito:mockito-core:5.2.0")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+    testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:postgresql")
-    testImplementation("com.github.dasniko:testcontainers-keycloak:3.6.0")
+    testImplementation("com.github.dasniko:testcontainers-keycloak:3.7.0")
     testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.28.1")
     testImplementation("org.springframework.security:spring-security-test")
 }
