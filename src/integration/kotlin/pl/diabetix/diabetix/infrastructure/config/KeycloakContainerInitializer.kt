@@ -1,4 +1,4 @@
-package pl.diabetix.diabetix
+package pl.diabetix.diabetix.infrastructure.config
 
 import dasniko.testcontainers.keycloak.KeycloakContainer
 import org.springframework.boot.test.util.TestPropertyValues

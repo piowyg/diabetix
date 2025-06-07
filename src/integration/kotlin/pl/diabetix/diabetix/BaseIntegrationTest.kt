@@ -14,18 +14,18 @@ import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.MongoDBContainer
 import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.utility.DockerImageName
-import pl.diabetix.diabetix.KeycloakContainerInitializer.Companion.getKeycloakContainer
-import pl.diabetix.diabetix.config.TestApplicationConfig
+import pl.diabetix.diabetix.infrastructure.config.KeycloakContainerInitializer.Companion.keycloakContainer
 import pl.diabetix.diabetix.infrastructure.FixedTestDateTimeProvider
+import pl.diabetix.diabetix.infrastructure.config.IntegrationTest
 import java.time.OffsetDateTime
 
-@Testcontainers
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SpringBootTest(
-    classes = [DiabetixApplication::class, TestApplicationConfig::class],
-    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("integration")
-@ContextConfiguration(initializers = [KeycloakContainerInitializer::class])
+
+/**
+ * Base class for integration tests.
+ * Sets up the test environment, including MongoDB and Keycloak containers.
+ * Provides utilities for time management in tests and repository cleanup.
+ */
+@IntegrationTest
 class BaseIntegrationTest {
 
     @Autowired
@@ -74,6 +74,6 @@ class BaseIntegrationTest {
 
     @AfterAll
 fun tearDownKeycloak() {
-        getKeycloakContainer().stop()
+        keycloakContainer.stop()
     }
 }
