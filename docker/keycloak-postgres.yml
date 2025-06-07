@@ -3,7 +3,7 @@ name: diabetix
 services:
   kc-postgres:
     container_name: diabetix-postgres
-    image: postgres:15
+    image: postgres:17
     environment:
       POSTGRES_DB: ${KC_DB_URL_DATABASE}
       POSTGRES_USER: ${KC_DB_USERNAME}

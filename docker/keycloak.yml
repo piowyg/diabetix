@@ -3,7 +3,7 @@ name: diabetix
 services:
   keycloak:
     container_name: diabetix-keycloak
-    image: quay.io/keycloak/keycloak:26.1.1
+    image: quay.io/keycloak/keycloak:25.0.2
     command: 'start-dev --import-realm'
     volumes:
       - ./keycloak/realm-config:/opt/keycloak/data/import
@@ -14,8 +14,8 @@ services:
       KC_DB_URL_DATABASE: ${KC_DB_URL_DATABASE}
       KC_DB_USERNAME: ${KC_DB_USERNAME}
       KC_DB_PASSWORD: ${KC_DB_PASSWORD}
-      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN}
-      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
       KC_FEATURES: scripts
       KC_HEALTH_ENABLED: true
     # If you want to expose these ports outside your dev PC,
