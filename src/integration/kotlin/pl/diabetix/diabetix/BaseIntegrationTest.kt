@@ -3,16 +3,11 @@ package pl.diabetix.diabetix
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.TestInfo
-import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.mongodb.repository.MongoRepository
-import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.MongoDBContainer
-import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.utility.DockerImageName
 import pl.diabetix.diabetix.infrastructure.config.KeycloakContainerInitializer.Companion.keycloakContainer
 import pl.diabetix.diabetix.infrastructure.FixedTestDateTimeProvider
