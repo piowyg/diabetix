@@ -1,6 +1,5 @@
 package pl.diabetix.diabetix
 
-import org.keycloak.admin.client.Keycloak
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -9,7 +8,7 @@ import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.web.client.RestTemplate
-import pl.diabetix.diabetix.KeycloakContainerInitializer.Companion.getKeycloakContainer
+import pl.diabetix.diabetix.KeycloakContainerInitializer.Companion.keycloakContainer
 import pl.diabetix.diabetix.config.KeycloakTestProperties
 
 @Component
@@ -21,7 +20,7 @@ class KeycloakTestUtils {
     private lateinit var restTemplate: RestTemplate
 
     fun getAccessToken(userName: String = "user", password: String = "user"): String {
-        val tokenUrl = "${getKeycloakContainer().authServerUrl}/realms/${keycloakProperties.realm.name}/protocol/openid-connect/token"
+        val tokenUrl = "${keycloakContainer.authServerUrl}/realms/${keycloakProperties.realm.name}/protocol/openid-connect/token"
 
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
@@ -48,21 +47,5 @@ class KeycloakTestUtils {
         } else {
             throw RuntimeException("Failed to obtain access token: $response")
         }
-    }
-
-    /**
-     * Get Keycloak client instance
-     * @return Keycloak client instance
-     */
-    private fun keycloakClient(): Keycloak {
-        val keycloakContainer = KeycloakContainerInitializer.getKeycloakContainer()
-
-        return Keycloak.getInstance(
-            keycloakContainer.getAuthServerUrl(),
-            "master",
-            keycloakProperties.admin.username,
-            keycloakProperties.admin.password,
-            "admin-cli"
-        )
     }
 }
