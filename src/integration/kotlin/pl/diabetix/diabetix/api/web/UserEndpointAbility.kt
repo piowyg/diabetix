@@ -6,6 +6,7 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
+import pl.diabetix.diabetix.KeycloakTestUtils
 //import pl.diabetix.diabetix.AuthenticationUtils
 import pl.diabetix.diabetix.UrlUtils
 
@@ -14,7 +15,7 @@ import pl.diabetix.diabetix.UrlUtils
 class UserEndpointAbility(
     private val restTemplate: RestTemplate, // TODO: change to WebClient or something
     private val urlUtils: UrlUtils,
-//    private val authenticationUtils: AuthenticationUtils
+    private val keycloakTestUtils: KeycloakTestUtils
 ) {
 
     fun callUserInfo(): ResponseEntity<UserResponse> {
@@ -29,7 +30,7 @@ class UserEndpointAbility(
 
     private fun headers(): HttpHeaders {
         val headers = HttpHeaders()
-//        headers.setBearerAuth(authenticationUtils.getToken())
+        headers.setBearerAuth(keycloakTestUtils.getAccessToken())
         headers.contentType = MediaType.APPLICATION_JSON
         return headers
     }
