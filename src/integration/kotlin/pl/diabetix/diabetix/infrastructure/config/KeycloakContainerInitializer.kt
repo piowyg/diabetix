@@ -4,36 +4,31 @@ import dasniko.testcontainers.keycloak.KeycloakContainer
 import org.springframework.boot.test.util.TestPropertyValues
 import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.ConfigurableApplicationContext
-import java.io.IOException
 
 class KeycloakContainerInitializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
 
     override fun initialize(applicationContext: ConfigurableApplicationContext) {
-        try {
-            val keycloakVersion = "25.0.2"
-            val keycloakAdminUsername = "admin"
-            val keycloakAdminPassword = "admin@123"
-            val keycloakRealmName = "diabetix"
+        val keycloakVersion = "25.0.2"
+        val keycloakAdminUsername = "admin"
+        val keycloakAdminPassword = "admin@123"
+        val keycloakRealmName = "diabetix"
 
-            // Start the Keycloak container
-            keycloakContainer = KeycloakContainer("quay.io/keycloak/keycloak:$keycloakVersion")
-                .withEnv("KEYCLOAK_ADMIN", keycloakAdminUsername)
-                .withEnv("KEYCLOAK_ADMIN_PASSWORD", keycloakAdminPassword)
-                .withRealmImportFile("realm-config/$keycloakRealmName-realm.json")
+        // Start the Keycloak container
+        keycloakContainer = KeycloakContainer("quay.io/keycloak/keycloak:$keycloakVersion")
+            .withEnv("KEYCLOAK_ADMIN", keycloakAdminUsername)
+            .withEnv("KEYCLOAK_ADMIN_PASSWORD", keycloakAdminPassword)
+            .withRealmImportFile("realm-config/$keycloakRealmName-realm.json")
 
-            keycloakContainer.start()
+        keycloakContainer.start()
 
-            // Dynamically set the properties in Spring's environment
-            val issuerUri = keycloakContainer.authServerUrl + "/realms/" + keycloakRealmName
+        // Dynamically set the properties in Spring's environment
+        val issuerUri = keycloakContainer.authServerUrl + "/realms/" + keycloakRealmName
 
-            TestPropertyValues.of(
-                "keycloak.server.url=" + keycloakContainer!!.authServerUrl,
-                "spring.security.oauth2.resourceserver.jwt.issuer-uri=$issuerUri",
-                "spring.security.oauth2.client.provider.oidc.issuer-uri=$issuerUri"
-            ).applyTo(applicationContext.environment)
-        } catch (e: IOException) {
-            throw RuntimeException("Failed to load properties from YAML file", e)
-        }
+        TestPropertyValues.of(
+            "keycloak.server.url=" + keycloakContainer!!.authServerUrl,
+            "spring.security.oauth2.resourceserver.jwt.issuer-uri=$issuerUri",
+            "spring.security.oauth2.client.provider.oidc.issuer-uri=$issuerUri"
+        ).applyTo(applicationContext.environment)
     }
 
     companion object {
