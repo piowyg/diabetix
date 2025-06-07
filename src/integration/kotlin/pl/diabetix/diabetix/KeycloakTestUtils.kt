@@ -8,7 +8,7 @@ import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.web.client.RestTemplate
-import pl.diabetix.diabetix.KeycloakContainerInitializer.Companion.keycloakContainer
+import pl.diabetix.diabetix.infrastructure.config.KeycloakContainerInitializer.Companion.keycloakContainer
 import pl.diabetix.diabetix.config.KeycloakTestProperties
 
 @Component
