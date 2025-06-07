@@ -40,9 +40,6 @@ class BaseIntegrationTest {
         dateTimeProvider.setDateTime(dateTime)
     }
 
-    // TODO:
-    //  integrate keycloak
-
     companion object {
         private const val MONGO_DB_DOCKER_IMAGE = "mongo:8.0.4"
 

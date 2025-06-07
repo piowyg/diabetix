@@ -16,7 +16,7 @@ class KeycloakContainerInitializer : ApplicationContextInitializer<ConfigurableA
             val keycloakRealmName = "diabetix"
 
             // Start the Keycloak container
-            keycloakContainer = KeycloakContainer("quay.io/keycloak/keycloak:" + keycloakVersion)
+            keycloakContainer = KeycloakContainer("quay.io/keycloak/keycloak:$keycloakVersion")
                 .withEnv("KEYCLOAK_ADMIN", keycloakAdminUsername)
                 .withEnv("KEYCLOAK_ADMIN_PASSWORD", keycloakAdminPassword)
                 .withRealmImportFile("realm-config/$keycloakRealmName-realm.json")
