@@ -90,7 +90,7 @@ tasks.register<Test>("integrationTest") {
     testClassesDirs = sourceSets["integration"].output.classesDirs
     classpath = sourceSets["integration"].runtimeClasspath
     useJUnitPlatform()
-    include("**/*IT*")
+    include("**/*Spec*")
     testLogging {
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
     }
