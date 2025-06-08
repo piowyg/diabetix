@@ -1,15 +1,15 @@
-package pl.diabetix.diabetix.api.web
+package pl.diabetix.diabetix.api.web.ability
 
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
 import pl.diabetix.diabetix.KeycloakTestUtils
-//import pl.diabetix.diabetix.AuthenticationUtils
 import pl.diabetix.diabetix.UrlUtils
-
+import pl.diabetix.diabetix.api.web.UserResponse
 
 @Component
 class UserEndpointAbility(
@@ -22,7 +22,7 @@ class UserEndpointAbility(
         val httpEntity = headers()
         return restTemplate.exchange(
             urlUtils.createUrl("/users/account"),
-            org.springframework.http.HttpMethod.GET,
+            HttpMethod.GET,
             HttpEntity(null, httpEntity),
             UserResponse::class.java
         )
