@@ -4,13 +4,16 @@ import com.mongodb.DuplicateKeyException
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.stereotype.Component
 import pl.diabetix.diabetix.domain.CreateUserException
+import pl.diabetix.diabetix.domain.DateTimeProvider
 import pl.diabetix.diabetix.domain.User
 import pl.diabetix.diabetix.domain.UserNotFoundException
 import pl.diabetix.diabetix.domain.UserRepository
+import java.time.Instant
 
 @Component
 class MongoUserRepository(
-    private val persistentUserRepository: PersistentUserRepository
+    private val persistentUserRepository: PersistentUserRepository,
+    private val dateTimeProvider: DateTimeProvider
 ) : UserRepository {
 
     override fun create(user: User) = try {
@@ -24,16 +27,28 @@ class MongoUserRepository(
 
 
     override fun update(user: User): User {
-        persistentUserRepository.findById(user.id)
+        val persistedUser = persistentUserRepository.findById(user.id)
             .orElseThrow { UserNotFoundException("User ${user.id} not found") }
 
-        return persistentUserRepository.save(user.asPersistentUser())
+        return persistentUserRepository.save(user.asPersistentUser(createdAt = persistedUser.createdAt))
             .also { logger.info { "Updating user ${it.id}" } }
             .toDomain()
     }
 
     override fun findUserByLogin(login: String): User? =
         persistentUserRepository.findByLogin(login)?.toDomain()
+
+    private fun User.asPersistentUser(createdAt: Instant? = null) = PersistentUser(
+        id = this.id,
+        email = this.email,
+        login = this.login,
+        name = this.name,
+        surname = this.surname,
+        birthdate = this.birthdate,
+        activated = this.activated,
+        createdAt = createdAt ?: dateTimeProvider.currentInstant(),
+        updatedAt = dateTimeProvider.currentInstant()
+    )
 
     companion object {
         private val logger = KotlinLogging.logger {}
