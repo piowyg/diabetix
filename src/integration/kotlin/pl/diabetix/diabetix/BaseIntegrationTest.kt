@@ -12,7 +12,8 @@ import org.testcontainers.utility.DockerImageName
 import pl.diabetix.diabetix.infrastructure.config.KeycloakContainerInitializer.Companion.keycloakContainer
 import pl.diabetix.diabetix.infrastructure.FixedTestDateTimeProvider
 import pl.diabetix.diabetix.infrastructure.config.IntegrationTest
-import java.time.OffsetDateTime
+import java.time.LocalDate
+import java.time.ZoneId
 
 
 /**
@@ -36,8 +37,8 @@ class BaseIntegrationTest {
         return keycloakTestUtils.getAccessToken()
     }
 
-    fun givenTime(dateTime: OffsetDateTime) {
-        dateTimeProvider.setDateTime(dateTime)
+    fun givenTime(dateTime: LocalDate) {
+        dateTimeProvider.setDateTime(dateTime.atStartOfDay(ZoneId.of("UTC")).toInstant())
     }
 
     companion object {
@@ -58,10 +59,8 @@ class BaseIntegrationTest {
     }
 
     @AfterEach
-    fun cleanUp(info: TestInfo) {
-        if (info.tags.contains("cleanRepo"))  {
-            repositories.forEach { it.deleteAll() }
-        }
+    fun cleanUp() {
+        repositories.forEach { it.deleteAll() }
     }
 
     @AfterAll

@@ -6,9 +6,11 @@ import org.springframework.stereotype.Component
 import pl.diabetix.diabetix.domain.CreateUserException
 import pl.diabetix.diabetix.domain.DateTimeProvider
 import pl.diabetix.diabetix.domain.User
+import pl.diabetix.diabetix.domain.UserId
 import pl.diabetix.diabetix.domain.UserNotFoundException
 import pl.diabetix.diabetix.domain.UserRepository
 import java.time.Instant
+import kotlin.jvm.optionals.getOrNull
 
 @Component
 class MongoUserRepository(
@@ -35,8 +37,10 @@ class MongoUserRepository(
             .toDomain()
     }
 
-    override fun findUserByLogin(login: String): User? =
-        persistentUserRepository.findByLogin(login)?.toDomain()
+    override fun findUserById(id: UserId): User? = persistentUserRepository.findById(id).getOrNull()?.toDomain()
+
+    override fun existsById(id: UserId): Boolean = persistentUserRepository.existsById(id)
+
 
     private fun User.asPersistentUser(createdAt: Instant? = null) = PersistentUser(
         id = this.id,

@@ -63,6 +63,7 @@ dependencies {
     testImplementation("com.github.dasniko:testcontainers-keycloak:3.7.0")
     testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.28.1")
     testImplementation("org.springframework.security:spring-security-test")
+    testImplementation("org.assertj:assertj-core:3.6.1")
 }
 
 sourceSets {

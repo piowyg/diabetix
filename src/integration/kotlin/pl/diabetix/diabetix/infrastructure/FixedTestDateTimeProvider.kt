@@ -2,21 +2,22 @@ package pl.diabetix.diabetix.infrastructure
 
 import pl.diabetix.diabetix.domain.DateTimeProvider
 import java.time.Instant
-import java.time.OffsetDateTime
+import java.time.LocalDate
+import java.time.ZoneId
 
 class FixedTestDateTimeProvider : DateTimeProvider {
 
-   var currentTime: OffsetDateTime = OffsetDateTime.now()
+   var currentTime: Instant = Instant.now()
 
-    fun setDateTime(time: OffsetDateTime) {
+    fun setDateTime(time: Instant) {
         currentTime = time
     }
 
-    override fun currentDateTime(): OffsetDateTime {
+    override fun currentInstant(): Instant {
         return currentTime
     }
 
-    override fun currentInstant(): Instant {
-        return currentTime.toInstant()
+    override fun currentLocalDate(): LocalDate {
+        return currentTime.atZone(ZoneId.of("UTC")).toLocalDate()
     }
 }

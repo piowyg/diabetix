@@ -2,6 +2,9 @@ package pl.diabetix.diabetix.domain
 
 import java.time.LocalDate
 
+typealias UserId = String
+typealias InfusionSetId = String
+
 data class Authority(val name: String)
 
 data class User(
@@ -14,4 +17,18 @@ data class User(
     val activated: Boolean
 )
 
-typealias UserId = String
+data class InfusionSetCommand(
+    val bodyLocation: String,
+    val userId: String,
+    val insertionDate: LocalDate
+)
+
+data class InfusionSet(
+    val id: InfusionSetId,
+    val bodyLocation: String,
+    val userId: UserId,
+    val isActive: Boolean,
+    val insertionDate: LocalDate,
+    val removalDeadline: LocalDate,
+    val removalDate: LocalDate? = null
+)

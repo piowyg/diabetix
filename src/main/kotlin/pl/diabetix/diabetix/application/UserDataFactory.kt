@@ -7,7 +7,7 @@ import java.time.LocalDate
 @Component
 class UserDataFactory {
 
-    fun getUser(details: Map<String, Any>): User {
+    fun createUser(details: Map<String, Any>): User {
         var activated = true
         val sub: String = details.get("sub").toString()
         val id: String
