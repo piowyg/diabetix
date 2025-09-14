@@ -68,18 +68,48 @@ class InfusionSetService(
     @Transactional
     fun update(id: String, command: InfusionSetUpdateCommand): InfusionSet {
         val current = infusionSetRepository.findById(id)
+        validateInfusionSet(command, current)
+
+        val updatedInsertionDate = command.insertionDate ?: current.insertionDate
+        val updatedRemovalDate = command.removalDate ?: current.removalDate
+
+        val updated = current.copy(
+            bodyLocation = command.bodyLocation ?: current.bodyLocation,
+            removalDate = updatedRemovalDate,
+            insertionDate = updatedInsertionDate,
+            removalDeadline = updatedInsertionDate.plusDays(3), // Recalculate deadline based on new insertion date
+            isActive = if (updatedRemovalDate != null) false else current.isActive
+        )
+        return infusionSetRepository.update(updated)
+    }
+
+    private fun validateInfusionSet(command: InfusionSetUpdateCommand, current: InfusionSet) {
+        // Validate removal date if provided
         command.removalDate?.let {
-            if (it.isBefore(current.insertionDate)) {
+            if (it < current.insertionDate) {
+                logger.error { "Removal date $it cannot be before insertion date ${current.insertionDate}" }
                 throw InvalidInfusionSetUpdateException("Removal date $it cannot be before insertion date ${current.insertionDate}")
             }
         }
 
-        val updated = current.copy(
-            bodyLocation = command.bodyLocation ?: current.bodyLocation,
-            removalDate = command.removalDate ?: current.removalDate,
-            insertionDate = command.insertionDate ?: current.insertionDate,
-        )
-        return infusionSetRepository.update(updated)
+        // Validate insertion date if provided
+        command.insertionDate?.let { newInsertionDate ->
+            // If removal date exists (either current or new), check that insertion date is not after removal date
+            val finalRemovalDate = command.removalDate ?: current.removalDate
+            finalRemovalDate?.let { removalDate ->
+                if (newInsertionDate.isAfter(removalDate)) {
+                    logger.error { "Insertion date $newInsertionDate cannot be after removal date $removalDate" }
+                    throw InvalidInfusionSetUpdateException("Insertion date $newInsertionDate cannot be after removal date $removalDate")
+                }
+            }
+
+            // insertion date should not be in the future
+            val currentDate = dateTimeProvider.currentLocalDate()
+            if (newInsertionDate.isAfter(currentDate)) {
+                logger.error { "Insertion date $newInsertionDate cannot be in the future" }
+                throw InvalidInfusionSetUpdateException("Insertion date $newInsertionDate cannot be in the future")
+            }
+        }
     }
 
     private fun removeActiveInfusionSet(userId: UserId) {

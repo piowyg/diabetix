@@ -4,6 +4,7 @@ import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.mongodb.core.mapping.Document
+import pl.diabetix.diabetix.domain.BodyLocation
 import pl.diabetix.diabetix.domain.InfusionSet
 import java.time.Instant
 import java.time.LocalDate
@@ -11,7 +12,7 @@ import java.time.LocalDate
 @Document(collection = "infusion_sets")
 data class PersistentInfusionSet(
     @Id val id: String,
-    val bodyLocation: String,
+    val bodyLocation: BodyLocation,
     val userId: String,
     val insertionDate: LocalDate,
     val removalDeadline: LocalDate,

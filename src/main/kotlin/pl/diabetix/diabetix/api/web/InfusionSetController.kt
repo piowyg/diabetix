@@ -1,6 +1,9 @@
 package pl.diabetix.diabetix.api.web
 
+import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.Pattern
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import pl.diabetix.diabetix.application.InfusionSetService
+import pl.diabetix.diabetix.domain.BodyLocation
 import pl.diabetix.diabetix.domain.InfusionSet
 import pl.diabetix.diabetix.domain.InfusionSetCommand
 import pl.diabetix.diabetix.domain.InfusionSetUpdateCommand
@@ -41,7 +45,7 @@ class InfusionSetController(
     @PutMapping("/{id}")
     fun updateInfusionSet(
         @PathVariable id: String,
-        @RequestBody request: InfusionSetUpdateRequest
+        @Valid @RequestBody request: InfusionSetUpdateRequest
     ): ResponseEntity<InfusionSetResponse> =
         infusionSetService.update(id, request.toCommand())
             .let { ResponseEntity.ok(it.toResponse()) }
@@ -64,24 +68,25 @@ class InfusionSetController(
     private fun InfusionSetUpdateRequest.toCommand() = InfusionSetUpdateCommand(
         bodyLocation = this.bodyLocation,
         removalDate = this.removalDate,
-        insertionDate = null
+        insertionDate = this.insertionDate
     )
 }
 
 data class InfusionSetCreateRequest(
-    val bodyLocation: String,
+    val bodyLocation: BodyLocation,
     val userId: String,
     val insertionDate: LocalDate
 )
 
 data class InfusionSetUpdateRequest(
-    val bodyLocation: String?,
-    val removalDate: LocalDate?
+    val bodyLocation: BodyLocation? = null,
+    val removalDate: LocalDate? = null,
+    val insertionDate: LocalDate? = null
 )
 
 data class InfusionSetResponse(
     val id: String,
-    val bodyLocation: String,
+    val bodyLocation: BodyLocation,
     val userId: UserId,
     val insertionDate: LocalDate,
     val removalDeadline: LocalDate,
