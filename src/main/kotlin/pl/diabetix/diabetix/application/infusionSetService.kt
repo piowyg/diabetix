@@ -3,12 +3,7 @@ package pl.diabetix.diabetix.application
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
-import pl.diabetix.diabetix.domain.DateTimeProvider
-import pl.diabetix.diabetix.domain.InfusionSet
-import pl.diabetix.diabetix.domain.InfusionSetCommand
-import pl.diabetix.diabetix.domain.InfusionSetRepository
-import pl.diabetix.diabetix.domain.UserId
-import pl.diabetix.diabetix.domain.UserNotFoundException
+import pl.diabetix.diabetix.domain.*
 
 /**
  * Service responsible for managing infusion sets for users.
@@ -37,9 +32,17 @@ class InfusionSetService(
 
         // check if there is an existing infusion set for the user
         removeActiveInfusionSet(infusionSetCommand.userId)
-
         return infusionSetRepository.create(infusionSetFactory.create(infusionSetCommand))
     }
+
+    /**
+     * Returns the infusion set with the given ID.
+     *
+     * @param id the ID of the infusion set
+     * @return the infusion set with the given ID
+     * @throws EntityNotFoundException if no infusion set with the given ID exists
+     */
+    fun getById(id: String): InfusionSet = infusionSetRepository.findById(id)
 
     /**
      * Returns the active infusion set for a given user, or null if none exists.
@@ -61,9 +64,24 @@ class InfusionSetService(
 
     /**
      * Removes the active infusion set for a user by setting its removalDate to the current date and marking it as inactive.
-     *
-     * @param userId the user identifier
-     */
+     **/
+    @Transactional
+    fun update(id: String, command: InfusionSetUpdateCommand): InfusionSet {
+        val current = infusionSetRepository.findById(id)
+        command.removalDate?.let {
+            if (it.isBefore(current.insertionDate)) {
+                throw InvalidInfusionSetUpdateException("Removal date $it cannot be before insertion date ${current.insertionDate}")
+            }
+        }
+
+        val updated = current.copy(
+            bodyLocation = command.bodyLocation ?: current.bodyLocation,
+            removalDate = command.removalDate ?: current.removalDate,
+            insertionDate = command.insertionDate ?: current.insertionDate,
+        )
+        return infusionSetRepository.update(updated)
+    }
+
     private fun removeActiveInfusionSet(userId: UserId) {
         val activeInfusionSet = getActiveInfusionSetByUserId(userId)
         activeInfusionSet?.let {
@@ -76,4 +94,3 @@ class InfusionSetService(
         private val logger = KotlinLogging.logger {}
     }
 }
-

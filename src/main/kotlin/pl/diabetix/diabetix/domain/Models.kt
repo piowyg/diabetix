@@ -23,6 +23,12 @@ data class InfusionSetCommand(
     val insertionDate: LocalDate
 )
 
+data class InfusionSetUpdateCommand(
+    val bodyLocation: String?,
+    val removalDate: LocalDate?,
+    val insertionDate: LocalDate?
+)
+
 data class InfusionSet(
     val id: InfusionSetId,
     val bodyLocation: String,

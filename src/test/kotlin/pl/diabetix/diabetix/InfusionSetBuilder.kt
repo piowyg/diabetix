@@ -18,6 +18,7 @@ class InfusionSetBuilder {
     fun insertionDate(insertionDate: LocalDate) = apply { this.insertionDate = insertionDate }
     fun removalDeadline(removalDeadline: LocalDate) = apply { this.removalDeadline = removalDeadline }
     fun removalDate(removalDate: LocalDate?) = apply { this.removalDate = removalDate }
+    fun isActive(isActive: Boolean) = apply { this.isActive = isActive }
 
     fun build(): InfusionSet = InfusionSet(
         id = id,
@@ -29,4 +30,3 @@ class InfusionSetBuilder {
         isActive = isActive,
     )
 }
-
