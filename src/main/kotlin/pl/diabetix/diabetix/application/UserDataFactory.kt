@@ -5,6 +5,7 @@ import pl.diabetix.diabetix.domain.User
 import java.time.LocalDate
 
 @Component
+// TODO: napisac testy jednostkowe
 class UserDataFactory {
 
     fun createUser(details: Map<String, Any>): User {

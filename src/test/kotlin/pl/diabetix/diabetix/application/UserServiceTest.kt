@@ -33,7 +33,7 @@ class UserServiceTest {
         val authToken = OAuth2AuthenticationToken(principal, authorities, "registrationId")
         val user = UserBuilder().login("testuser").build()
         userRepository.given(user)
-        whenever(userDataFactory.getUser(any())).thenReturn(user)
+        whenever(userDataFactory.createUser(any())).thenReturn(user)
 
         val result = underTest.getUserFromAuthentication(authToken)
 
@@ -48,7 +48,7 @@ class UserServiceTest {
         val authorities = listOf(SimpleGrantedAuthority("ROLE_USER"))
         val authToken = JwtAuthenticationToken(jwt, authorities)
         val user = UserBuilder().login("jwtuser").build()
-        whenever(userDataFactory.getUser(any())).thenReturn(user)
+        whenever(userDataFactory.createUser(any())).thenReturn(user)
         userRepository.given(user)
 
         val result = underTest.getUserFromAuthentication(authToken)
