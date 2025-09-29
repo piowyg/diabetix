@@ -30,3 +30,6 @@ diabetix:
 scheduling:
   infusion-set-removal:
     cron: "0 0 20 * * *"
+notification:
+  calendar:
+    name: "Home"
