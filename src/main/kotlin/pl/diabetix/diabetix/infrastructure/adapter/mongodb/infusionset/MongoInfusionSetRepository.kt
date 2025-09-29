@@ -1,4 +1,4 @@
-package pl.diabetix.diabetix.infrastructure.adapter.mongodb.infussionset
+package pl.diabetix.diabetix.infrastructure.adapter.mongodb.infusionset
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.stereotype.Component

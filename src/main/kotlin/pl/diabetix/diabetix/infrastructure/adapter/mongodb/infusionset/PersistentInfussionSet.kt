@@ -1,4 +1,4 @@
-package pl.diabetix.diabetix.infrastructure.adapter.mongodb.infussionset
+package pl.diabetix.diabetix.infrastructure.adapter.mongodb.infusionset
 
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id

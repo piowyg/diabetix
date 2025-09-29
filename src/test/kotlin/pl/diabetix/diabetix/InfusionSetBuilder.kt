@@ -8,7 +8,7 @@ class InfusionSetBuilder {
     private var id: String = "123"
     private var bodyLocation: BodyLocation = BodyLocation.ARM
     private var userId: String = "1234"
-    private var insertionDate: LocalDate = LocalDate.of(2025, 6, 8,)
+    private var insertionDate: LocalDate = LocalDate.of(2025, 6, 8)
     private var removalDeadline: LocalDate = LocalDate.of(2025, 6, 11)
     private var removalDate: LocalDate? = null
     private var isActive: Boolean = true

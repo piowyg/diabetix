@@ -40,7 +40,7 @@ class InfusionSetService(
      *
      * @param id the ID of the infusion set
      * @return the infusion set with the given ID
-     * @throws EntityNotFoundException if no infusion set with the given ID exists
+     * @throws InfusionSetNotFoundException if no infusion set with the given ID exists
      */
     fun getById(id: String): InfusionSet = infusionSetRepository.findById(id)
 

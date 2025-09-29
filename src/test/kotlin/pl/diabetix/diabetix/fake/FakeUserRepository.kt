@@ -10,7 +10,7 @@ class FakeUserRepository : UserRepository {
     override fun existsById(id: UserId): Boolean = users[id] != null
 
     override fun create(user: User): User {
-        users[user.login] = user
+        users[user.id] = user
         return user
     }
 

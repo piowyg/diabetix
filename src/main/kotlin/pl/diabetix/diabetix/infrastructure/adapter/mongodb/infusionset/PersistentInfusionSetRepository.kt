@@ -1,4 +1,4 @@
-package pl.diabetix.diabetix.infrastructure.adapter.mongodb.infussionset
+package pl.diabetix.diabetix.infrastructure.adapter.mongodb.infusionset
 
 import org.springframework.data.mongodb.repository.MongoRepository
 import pl.diabetix.diabetix.domain.UserId
