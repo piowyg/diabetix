@@ -27,3 +27,6 @@ diabetix:
       audience:
         - account
         - api://default
+scheduling:
+  infusion-set-removal:
+    cron: "0 0 20 * * *"

@@ -2,6 +2,7 @@ package pl.diabetix.diabetix.infrastructure.adapter.mongodb.infusionset
 
 import org.springframework.data.mongodb.repository.MongoRepository
 import pl.diabetix.diabetix.domain.UserId
+import java.time.LocalDate
 
 /**
  * Repository for managing PersistentInfusionSet entities in MongoDB.
@@ -23,4 +24,9 @@ interface PersistentInfusionSetRepository: MongoRepository<PersistentInfusionSet
      */
     @org.springframework.data.mongodb.repository.Query("{ 'userId': ?0, 'isActive': true }")
     fun findActiveByUserId(userId: UserId): PersistentInfusionSet?
+
+    /**
+     * Returns infusion sets having removalDeadline equal to the given date.
+     */
+    fun findByRemovalDeadline(removalDeadline: LocalDate): List<PersistentInfusionSet>
 }
