@@ -21,19 +21,9 @@ data class PersistentUser (
     val activated: Boolean,
     val birthdate: LocalDate,
     @CreatedDate
-    val createdAt: Instant = Instant.now(),
+    val createdAt: Instant,
     @LastModifiedDate
-    val updatedAt: Instant? = null,
-)
-
-internal fun User.asPersistentUser() = PersistentUser(
-    id = this.id,
-    email = this.email,
-    login = this.login,
-    name = this.name,
-    surname = this.surname,
-    birthdate = this.birthdate,
-    activated = this.activated
+    val updatedAt: Instant
 )
 
 internal fun PersistentUser.toDomain() = User(

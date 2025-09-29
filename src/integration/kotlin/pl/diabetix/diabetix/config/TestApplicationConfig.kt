@@ -8,8 +8,7 @@ import org.springframework.web.client.RestTemplate
 import pl.diabetix.diabetix.infrastructure.FixedTestDateTimeProvider
 import java.time.Duration
 
-// todo: sprawdzic co robi ten props
-@TestConfiguration(proxyBeanMethods = false)
+@TestConfiguration
 class TestApplicationConfig {
 
     @Bean
@@ -18,6 +17,7 @@ class TestApplicationConfig {
 
 
     // TODO:
+    // napisac bean dla WebTestClient
     //  moze webClient?
     @Bean
     fun restTemplate(): RestTemplate {

@@ -1,13 +1,16 @@
 package pl.diabetix.diabetix.fake
 
 import pl.diabetix.diabetix.domain.User
+import pl.diabetix.diabetix.domain.UserId
 import pl.diabetix.diabetix.domain.UserRepository
 
 class FakeUserRepository : UserRepository {
-    private val users = mutableMapOf<String, User>()
-    override fun findUserByLogin(login: String): User? = users[login]
+    private val users = mutableMapOf<UserId, User>()
+    override fun findUserById(id: UserId): User? = users[id]
+    override fun existsById(id: UserId): Boolean = users[id] != null
+
     override fun create(user: User): User {
-        users[user.login] = user
+        users[user.id] = user
         return user
     }
 

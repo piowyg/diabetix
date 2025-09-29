@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import pl.diabetix.diabetix.domain.CreateUserException
+import pl.diabetix.diabetix.domain.InfusionSetNotFoundException
+import pl.diabetix.diabetix.domain.InvalidInfusionSetUpdateException
 import pl.diabetix.diabetix.domain.UserNotFoundException
 
 @ControllerAdvice
@@ -27,6 +29,24 @@ class ExceptionHandlers() {
     fun handleUserNotFoundException(ex: UserNotFoundException): ResponseEntity<ErrorResponse> {
         logger.error { "handle UserNotFoundException ${ex.message}" }
         return handleException(ex.message, HttpStatus.NOT_FOUND)
+    }
+
+    @ExceptionHandler
+    fun handleInfusionSetNotFoundException(ex: InfusionSetNotFoundException): ResponseEntity<ErrorResponse> {
+        logger.error { "handle InfusionSetNotFoundException ${ex.message}" }
+        return handleException(ex.message, HttpStatus.NOT_FOUND)
+    }
+
+    @ExceptionHandler
+    fun handleInvalidInfusionSetUpdateException(ex: InvalidInfusionSetUpdateException): ResponseEntity<ErrorResponse> {
+        logger.error { "handle InvalidInfusionSetUpdateException ${ex.message}" }
+        return handleException(ex.message, HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler
+    fun handleInvalidInfusionSetUpdateException(ex: IllegalStateException): ResponseEntity<ErrorResponse> {
+        logger.error { "handle IllegalStateException ${ex.message}" }
+        return handleException(ex.message, HttpStatus.BAD_REQUEST)
     }
 
     private fun handleException(message: String?, status: HttpStatus) =

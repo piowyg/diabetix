@@ -9,7 +9,6 @@ import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configurers.CorsConfigurer
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.*
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository
@@ -58,6 +57,7 @@ class SecurityConfiguration(
             }
             .authorizeHttpRequests {
                 it.requestMatchers("/users/account").authenticated()
+                it.requestMatchers("/infusion-sets").authenticated()
                 it.anyRequest().permitAll()
             }
             .oauth2Login { oauth2 -> oauth2.loginPage("/").userInfoEndpoint { userInfo -> userInfo.oidcUserService(oidcUserService()) } }

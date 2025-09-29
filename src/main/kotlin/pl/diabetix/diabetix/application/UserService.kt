@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Component
 import pl.diabetix.diabetix.domain.Authority
 import pl.diabetix.diabetix.domain.User
+import pl.diabetix.diabetix.domain.UserId
 import pl.diabetix.diabetix.domain.UserRepository
 import java.util.stream.Collectors
 
@@ -16,6 +17,12 @@ class UserService(
     private val userRepository: UserRepository,
     private val userDataFactory: UserDataFactory
 ) {
+
+    fun create(user: User): User = userRepository.create(user)
+
+    fun existsById(userId: UserId) = userRepository.existsById(userId)
+
+
     /**
      * Returns the user from an OAuth 2.0 login or resource server with JWT.
      * Synchronizes the user in the local repository.
@@ -37,13 +44,13 @@ class UserService(
             .collect(Collectors.toSet())
         attributes["authorities"] = authorities
 
-        val user = userDataFactory.getUser(attributes)
+        val user = userDataFactory.createUser(attributes)
         return syncUserWithIdP(user)
     }
 
     private fun syncUserWithIdP(user: User): User {
         // save account in to sync users between IdP and JHipster's local database
-        val existingUser = userRepository.findUserByLogin(user.login)
+        val existingUser = userRepository.findUserById(user.id)
         if (existingUser == null) {
             logger.debug{ "Saving user ${user.login} in local database" }
             userRepository.create(user)
