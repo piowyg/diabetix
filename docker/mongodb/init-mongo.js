@@ -76,7 +76,7 @@ if (!db.getCollectionNames().includes(infusionSetsCollection)) {
     // Helpful indexes for app queries
     db.infusion_sets.createIndex({ userId: 1 });
     db.infusion_sets.createIndex({ userId: 1, isActive: 1 }); // for findActiveByUserId
-    db.infusion_sets.createIndex({ removalDate: 1 }); // for findByRemovalDate
+    db.infusion_sets.createIndex({ removalDeadline: 1 }); // for findByRemovalDeadline
 
     print("✅ Indexes for 'infusion_sets' have been created.");
 } else {
