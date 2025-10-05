@@ -6,6 +6,7 @@ import pl.diabetix.diabetix.domain.InfusionSet
 import pl.diabetix.diabetix.domain.InfusionSetNotFoundException
 import pl.diabetix.diabetix.domain.InfusionSetRepository
 import pl.diabetix.diabetix.domain.UserId
+import java.time.LocalDate
 
 @Component
 class MongoInfusionSetRepository(
@@ -37,6 +38,9 @@ class MongoInfusionSetRepository(
         repository.findById(id)
             .orElseThrow { InfusionSetNotFoundException("Infusion set with id $id not found")}
             .toDomain()
+
+    override fun findByRemovalDeadline(date: LocalDate): List<InfusionSet> =
+        repository.findByRemovalDeadline(date).map { it.toDomain() }
 
     companion object {
         private val logger = KotlinLogging.logger {}
